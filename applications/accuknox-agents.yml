@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: accuknox-agents
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: accuknox-agents
+      repoURL:  registry-1.docker.io/accuknox
+      targetRevision: v0.8.1
+      helm:
+        releaseName: agents
+        valueFiles:
+        - $values/accuknox/accuknox-agents/values.yml
+    - repoURL: 'https://github.com/safeer-accuknox/accuknox-cwpp-kspm-gitops' 
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: agents
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
