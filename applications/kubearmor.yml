@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubearmor-operator
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: kubearmor-operator
+      repoURL:  https://kubearmor.github.io/charts
+      targetRevision: v1.4.6
+      helm:
+        releaseName: kubearmor-operator
+        valueFiles:
+        - $values/accuknox/kubearmor/values.yml
+    - repoURL: 'https://github.com/safeer-accuknox/accuknox-cwpp-kspm-gitops' 
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kubearmor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
