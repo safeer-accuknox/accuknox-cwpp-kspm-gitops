@@ -1,1 +1,26 @@
 autoDeploy: true
+
+kubearmorConfig:
+  defaultCapabilitiesPosture: audit
+  defaultFilePosture: audit
+  defaultNetworkPosture: audit
+  defaultVisibility: process,network
+  enableStdOutLogs: false
+  enableStdOutAlerts: false
+  enableStdOutMsgs: false
+  seccompEnabled: false
+  alertThrottling: true
+  maxAlertPerSec: 10
+  throttleSec: 30
+  kubearmorImage:
+    image: kubearmor/kubearmor:stable
+    imagePullPolicy: Always
+  kubearmorInitImage:
+    image: kubearmor/kubearmor-init:stable
+    imagePullPolicy: Always
+  kubearmorRelayImage:
+    image: kubearmor/kubearmor-relay-server
+    imagePullPolicy: Always
+  kubearmorControllerImage:
+    image: kubearmor/kubearmor-controller
+    imagePullPolicy: Always
