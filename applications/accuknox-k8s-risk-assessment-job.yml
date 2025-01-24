@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: accuknox-k8s-risk-assessment-job
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: accuknox-k8s-risk-assessment-job
+      repoURL:  public.ecr.aws/k9v9d5v2
+      targetRevision: v1.1.3
+      helm:
+        releaseName: k8s-risk-assessment-job
+        valueFiles:
+        - $values/accuknox/accuknox-k8s-risk-assessment-job/values.yml
+    - repoURL: 'https://github.com/safeer-accuknox/accuknox-cwpp-kspm-gitops' 
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: accuknox-kspm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
